@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+
+    
+
+{% block content %}
+<div class="content">
+
+    <aside class="side__bar">
+        <form action="" class="side__bar-form">
+            <div class="side__bar-form-div">
+                <div class="side__bar_filter-ul-div brand__filter">
+                    <span class="side__bar_filter-ul-text brand__filter_text">Сортировать по брэнду</span>
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <svg class="side__bar_filter-ul-svg brand__filter_svg" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                        <path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/>
+                    </svg>
+                </div>
+                
+                <ul class="side__bar_filter-ul filter__none_active brand__filter_ul">
+                    {% for brand in brands %}
+                    <li class="side__bar_filter-ul-li brand__filter_li">
+                        <a href={% url 'filter_by_brand' brand %} class="side__bar_filter-text">{{ brand.name_brand }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="side__bar-form-div">
+                <div class="side__bar_filter-ul-div memory__filter">
+                    <span class="side__bar_filter-ul-text memory__filter_text">Сортировать по памяти</span>
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <svg class="side__bar_filter-ul-svg memory__filter_svg" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                        <path d="M18.71,8.21a1,1,0,0,0-1.42,0l-4.58,4.58a1,1,0,0,1-1.42,0L6.71,8.21a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l4.59,4.59a3,3,0,0,0,4.24,0l4.59-4.59A1,1,0,0,0,18.71,8.21Z"/>
+                    </svg>
+                </div>
+                                
+                <ul class="side__bar_filter-ul filter__none_active memory__filter_ul">
+                    {% for memory in memories %}
+                    <li class="side__bar_filter-ul-li brand__filter_li">
+                        <a href={% url 'filter_by_memory' memory %} class="side__bar_filter-text">{{ memory }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% comment %} <button type="submit" class="side__bar-form-button">Применить</button> {% endcomment %}
+        </form>
+
+        <div class="wrapper">
+            <div class="price-input">
+                <div class="field">
+                    <span>Min</span>
+                    <input type="number" class="input-min" value="480">
+                </div>
+                <div class="separator">-</div>
+                <div class="field">
+                    <span>Max</span>
+                    <input type="number" class="input-max" value="1500">
+                </div>
+            </div>
+
+            <div class="slider">
+                <div class="progress"></div>
+            </div>
+
+            <div class="range-input">
+                <input type="range" name="min" class="range-min" min="0" max="2000" value="480" step="5">
+                <input type="range" name="max" class="range-max" min="0" max="2000" value="1500" step="5">
+                <a href="#" class="wrapper__button">Поиск по цене</a>
+            </div>
+
+            {% comment %} <form action={% url 'filter_by_price' %} method="post" class="range-input">
+                {% csrf_token %}
+                <input type="range" name="min" class="range-min" min="0" max="2000" value="480" step="5">
+                <input type="range" name="max" class="range-max" min="0" max="2000" value="1500" step="5">
+                <button type="submit" class="wrapper__button">Поиск по цене</button>
+            </form> {% endcomment %}
+
+        </div>
+    </aside>
+
+    <div class="cards">
+        {% for phone in phones %}
+        <div class="card">
+            <img src="{{ phone.image.url }}" alt="{{ phone.name_phone }}" class="card__image">
+            <div class="card__info">
+                <a href={% url 'get_current_phone' phone.id %} class="card__name">Смартфон {{ phone.brand_id|title }} {{ phone.name_phone|title }} {{ phone.memory }}Gb {{ phone.color }}</a>
+                <div class="card__info-block">
+                    <div class="card__price-block">
+                        <span class="card__discount">${{ phone.discount }}</span>
+                        <span class="card__price">${{ phone.price }}</span>
+                    </div>
+                    <a href={% url 'add_cart' phone.id %} class="card__add">
+                        {% if phone.cart %}
+                        <svg class="card__add-svg-active" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 1C1.44772 1 1 1.44772 1 2C1 2.55228 1.44772 3 2 3H3.21922L6.78345 17.2569C5.73276 17.7236 5 18.7762 5 20C5 21.6569 6.34315 23 8 23C9.65685 23 11 21.6569 11 20C11 19.6494 10.9398 19.3128 10.8293 19H15.1707C15.0602 19.3128 15 19.6494 15 20C15 21.6569 16.3431 23 18 23C19.6569 23 21 21.6569 21 20C21 18.3431 19.6569 17 18 17H8.78078L8.28078 15H18C20.0642 15 21.3019 13.6959 21.9887 12.2559C22.6599 10.8487 22.8935 9.16692 22.975 7.94368C23.0884 6.24014 21.6803 5 20.1211 5H5.78078L5.15951 2.51493C4.93692 1.62459 4.13696 1 3.21922 1H2ZM18 13H7.78078L6.28078 7H20.1211C20.6742 7 21.0063 7.40675 20.9794 7.81078C20.9034 8.9522 20.6906 10.3318 20.1836 11.3949C19.6922 12.4251 19.0201 13 18 13ZM18 20.9938C17.4511 20.9938 17.0062 20.5489 17.0062 20C17.0062 19.4511 17.4511 19.0062 18 19.0062C18.5489 19.0062 18.9938 19.4511 18.9938 20C18.9938 20.5489 18.5489 20.9938 18 20.9938ZM7.00617 20C7.00617 20.5489 7.45112 20.9938 8 20.9938C8.54888 20.9938 8.99383 20.5489 8.99383 20C8.99383 19.4511 8.54888 19.0062 8 19.0062C7.45112 19.0062 7.00617 19.4511 7.00617 20Z"/>
+                        </svg>
+                        {% else %}
+                        <svg class="card__add-svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 1C1.44772 1 1 1.44772 1 2C1 2.55228 1.44772 3 2 3H3.21922L6.78345 17.2569C5.73276 17.7236 5 18.7762 5 20C5 21.6569 6.34315 23 8 23C9.65685 23 11 21.6569 11 20C11 19.6494 10.9398 19.3128 10.8293 19H15.1707C15.0602 19.3128 15 19.6494 15 20C15 21.6569 16.3431 23 18 23C19.6569 23 21 21.6569 21 20C21 18.3431 19.6569 17 18 17H8.78078L8.28078 15H18C20.0642 15 21.3019 13.6959 21.9887 12.2559C22.6599 10.8487 22.8935 9.16692 22.975 7.94368C23.0884 6.24014 21.6803 5 20.1211 5H5.78078L5.15951 2.51493C4.93692 1.62459 4.13696 1 3.21922 1H2ZM18 13H7.78078L6.28078 7H20.1211C20.6742 7 21.0063 7.40675 20.9794 7.81078C20.9034 8.9522 20.6906 10.3318 20.1836 11.3949C19.6922 12.4251 19.0201 13 18 13ZM18 20.9938C17.4511 20.9938 17.0062 20.5489 17.0062 20C17.0062 19.4511 17.4511 19.0062 18 19.0062C18.5489 19.0062 18.9938 19.4511 18.9938 20C18.9938 20.5489 18.5489 20.9938 18 20.9938ZM7.00617 20C7.00617 20.5489 7.45112 20.9938 8 20.9938C8.54888 20.9938 8.99383 20.5489 8.99383 20C8.99383 19.4511 8.54888 19.0062 8 19.0062C7.45112 19.0062 7.00617 19.4511 7.00617 20Z"/>
+                        </svg>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+</div>
+{% endblock content %}

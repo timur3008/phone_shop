@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block phone %}
+
+    <div class="container__block-phone">
+        <img src={{ phone.image.url }} alt="" class="phone__main_image">
+        <div class="phone__content">
+            <div class="phone__content_info">
+                <p class="phone__content_text">Смартфон {{ phone.brand_id|title }} {{ phone.name_phone|title }} {{ phone.memory }}Gb {{ phone.color }}</p>
+                <p class="phone__content_text">Старая стоимость: ${{ phone.price }}</p>
+                <p class="phone__content_text">Цена по скидке: ${{ phone.discount }}</p>
+                <p class="phone__content_text">{{ phone.description }}</p>
+            </div>
+            <div class="phone__content_screens">
+                <img src={{ phone.image.url }} data-position="0" alt="" class="phone__content-screen screen__active">
+                {% for id, item in screens.items %}
+                <img src={{ item }} data-position={{ id }} alt="" class="phone__content-screen">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock phone %}
